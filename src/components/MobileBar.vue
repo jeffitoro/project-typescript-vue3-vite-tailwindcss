@@ -10,9 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits } from "vue";
 import { MenuIcon } from "@heroicons/vue/solid";
-
 
 const emit = defineEmits(["openSideBar"]);
 const openSideBar = () => {
