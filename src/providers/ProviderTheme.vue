@@ -1,12 +1,15 @@
 <template>
+  <!-- component renderless start -->
   <slot />
+  <!-- component renderless end -->
 </template>
 
 <script lang="ts" setup>
-import { provide, ref } from "vue";
+import { provide, ref, onBeforeMount } from "vue";
 import type { ThemeOptionType, UpdateThemeOptions } from "@/types";
 import { showThemeOptionsKey, updateThemeOptionsKey } from "@/symbols";
 
+// check darkmode enable
 const getTheme = (): boolean => {
   if (window.localStorage.getItem("isDark")) {
     return !!JSON.parse(window.localStorage.getItem("isDark") || "");
@@ -22,10 +25,26 @@ const options = ref<ThemeOptionType>({
   isDark: getTheme(),
 });
 
+// update properties in body generic
+const updateDarkModeGeneric = (): void => {
+  if (options.value.isDark) {
+    document.documentElement.classList.add("dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+  }
+};
+
+// update state before mount provider theme
+onBeforeMount(() => {
+  window.localStorage.setItem("isDark", JSON.stringify(options.value.isDark));
+  updateDarkModeGeneric();
+});
+
 // define update options
 const update: UpdateThemeOptions = () => {
-  options.value.isDark = getTheme();
+  options.value.isDark = !options.value.isDark;
   window.localStorage.setItem("isDark", JSON.stringify(options.value.isDark));
+  updateDarkModeGeneric();
 };
 
 // declaration

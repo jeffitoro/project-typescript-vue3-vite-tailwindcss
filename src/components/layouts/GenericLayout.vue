@@ -5,20 +5,26 @@
     <!-- mobilebar end -->
 
     <!-- sidebar start -->
-    <SideBar :open="openSideBar" @openSideBar="updateOpenSideBar"></SideBar>
+    <SideBar
+      :open="openSideBar"
+      @openSideBar="updateOpenSideBar"
+      :messages="messageStore.getMessages"
+    ></SideBar>
     <!-- sidebar end -->
 
     <!-- contentlayout start -->
-    <ContentLayout></ContentLayout>
+    <router-view></router-view>
     <!-- contentlayout end -->
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import SideBar from "../SideBar.vue";
-import ContentLayout from "../ContentLayout.vue";
-import MobileBar from "../MobileBar.vue";
+import SideBar from "@/components/bars/SideBar.vue";
+import MobileBar from "@/components/bars/MobileBar.vue";
+import { useMessageStore } from "@/stores";
+
+const messageStore = useMessageStore();
 
 const openSideBar = ref(false);
 const updateOpenSideBar = () => {
